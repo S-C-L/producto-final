@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Actualizar álbum - {{TITULO}}</title>
+  <style nonce="{{NONCE}}">
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0080ff; font-family: Arial, sans-serif; color: #1c1e21; }
+    main { max-width: 760px; margin: 48px auto; padding: 32px; background: white; border-radius: 16px; box-shadow: 0 2px 8px #0002; }
+    a { color: #0866ff; text-decoration: none; }
+    h1 { color: #0080ff; overflow-wrap: anywhere; }
+    form { padding: 20px; border-radius: 8px; background: #f2f2f2; }
+    label { display: block; margin-bottom: 20px; font-size: 14px; }
+    input:not([type="hidden"]), textarea { display: block; width: 100%; margin-top: 8px; padding: 12px; border: 1px solid #ccd0d5; border-radius: 6px; font: inherit; }
+    textarea { resize: vertical; min-height: 140px; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+    .accion { display: inline-block; border: 0; border-radius: 6px; background: #0080ff; color: white; padding: 14px 18px; font: inherit; cursor: pointer; text-align: center; }
+    .accion:hover { background: #0066cc; }
+    .cancelar { background: #dc2626; }
+    .cancelar:hover { background: #b91c1c; }
+    .aviso { padding: 14px; border-left: 4px solid #0866ff; background: #e7f3ff; }
+    :focus-visible { outline: 3px solid #0866ff; outline-offset: 3px; }
+    @media (max-width: 600px) { main { margin: 16px; padding: 20px; } form { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="{{CONTEXTO}}/agregar-fotos?id={{ALBUM_ID}}">← Volver al álbum</a>
+    <h1>Actualizar álbum</h1>
+    {{AVISO}}
+    <form method="post" action="{{CONTEXTO}}/actualizar-album">
+      <input type="hidden" name="accion" value="actualizarAlbum">
+      <input type="hidden" name="csrf" value="{{CSRF}}">
+      <input type="hidden" name="album_id" value="{{ALBUM_ID}}">
+      <label>Título del álbum<input name="titulo_album" value="{{TITULO}}" maxlength="150" required></label>
+      <label>Descripción<textarea name="descripcion_album" maxlength="5000" required>{{DESCRIPCION_FORM}}</textarea></label>
+      <div class="acciones">
+        <button class="accion" type="submit">Guardar cambios</button>
+        <a class="accion cancelar" href="{{CONTEXTO}}/agregar-fotos?id={{ALBUM_ID}}">Cancelar</a>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

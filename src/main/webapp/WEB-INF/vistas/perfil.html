@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalle de mi perfil - Gestor de Álbumes</title>
+  <style nonce="{{NONCE}}">
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0080ff; font-family: Arial, sans-serif; color: #333; }
+    main { max-width: 760px; margin: 48px auto; padding: 40px; background: white; box-shadow: 0 2px 20px #0003; border-radius: 12px; }
+    h1 { color: #0080ff; text-align: center; }
+    a { color: #0080ff; text-decoration: none; }
+    .campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    label { display: block; font-size: 14px; }
+    input, select { display: block; width: 100%; margin-top: 8px; padding: 14px; border: 0; border-radius: 6px; background: #f2f2f2; font: inherit; }
+    input[type="hidden"] { display: none; }
+    .foto { text-align: center; margin: 24px 0; }
+    .foto img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #0080ff; }
+    .foto label { max-width: 400px; margin: 12px auto; }
+    .ayuda { color: #65676b; font-size: 14px; line-height: 1.6; }
+    fieldset { margin: 24px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+    button { width: 100%; padding: 16px; border: 0; border-radius: 6px; background: #0080ff; color: white; font-size: 16px; cursor: pointer; }
+    button:hover { background: #0066cc; }
+    :focus-visible { outline: 2px solid #0080ff; outline-offset: 3px; }
+    .aviso { background: #e0f0ff; padding: 14px; border-left: 4px solid #0080ff; line-height: 1.5; }
+    #estado { color: #b42318; }
+    @media (max-width: 600px) { main { margin: 16px; padding: 24px; } .campos { grid-template-columns: 1fr; } fieldset { padding: 14px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="{{CONTEXTO}}/index">← Mis álbumes</a>
+    <h1>Detalle de mi perfil</h1>
+    {{AVISO}}
+    <form id="perfil" method="post" action="{{CONTEXTO}}/perfil" enctype="multipart/form-data">
+      <input type="hidden" name="accion" value="actualizarPerfil">
+      <input type="hidden" name="csrf" value="{{CSRF}}">
+      <div class="foto">
+        <img id="vista-foto" src="{{FOTO}}" alt="Tu foto de perfil">
+        <label>Actualizar fotografía
+          <input id="foto" type="file" name="foto" accept=".jpg,.jpeg,.png,.gif,.webp" aria-describedby="ayuda-foto">
+        </label>
+        <p id="ayuda-foto" class="ayuda">JPG, PNG, GIF o WebP. Máximo 32 MB.<br>Si no eliges una foto nueva, se conservará la actual.</p>
+      </div>
+      <div class="campos">
+        <label>Nombre completo<input type="text" name="nombre" value="{{NOMBRE}}" maxlength="100" autocomplete="name" required></label>
+        <label>Usuario<input type="text" name="usuario" value="{{USUARIO}}" minlength="3" maxlength="50" pattern="[A-Za-z0-9_.\-]{3,50}" title="De 3 a 50 caracteres: letras, números, punto, guion o guion bajo" autocomplete="username" required></label>
+        <label>Correo electrónico<input type="email" name="email" value="{{EMAIL}}" maxlength="100" autocomplete="email" required></label>
+        <label>Sexo<select name="sexo" required>
+          <option value="">Selecciona sexo</option>
+          <option value="Femenino" {{FEMENINO}}>Femenino</option>
+          <option value="Masculino" {{MASCULINO}}>Masculino</option>
+          <option value="Otro" {{OTRO}}>Otro</option>
+        </select></label>
+        <label>Fecha de nacimiento<input type="date" name="fecha_nacimiento" value="{{FECHA_NACIMIENTO}}" autocomplete="bday" required></label>
+        <label>Ciudad de residencia<input type="text" name="ciudad" value="{{CIUDAD}}" maxlength="100" autocomplete="address-level2" required></label>
+        <label>País de residencia<input type="text" name="pais" value="{{PAIS}}" maxlength="100" autocomplete="country-name" required></label>
+      </div>
+      <fieldset>
+        <legend>Cambiar contraseña</legend>
+        <p class="ayuda">Por seguridad no mostramos tu contraseña actual. Deja ambos campos vacíos para conservarla.</p>
+        <div class="campos">
+          <label>Nueva contraseña<input type="password" name="clave" minlength="8" maxlength="128" autocomplete="new-password"></label>
+          <label>Repetir nueva contraseña<input type="password" name="clave_repetir" minlength="8" maxlength="128" autocomplete="new-password"></label>
+        </div>
+      </fieldset>
+      <p id="estado" role="alert"></p>
+      <button type="submit">Guardar cambios</button>
+    </form>
+  </main>
+  <script nonce="{{NONCE}}">
+    const foto = document.getElementById('foto');
+    const estado = document.getElementById('estado');
+    const vista = document.getElementById('vista-foto');
+    const fotoActual = vista.src;
+    foto.addEventListener('change', () => {
+      estado.textContent = '';
+      const archivo = foto.files[0];
+      vista.src = fotoActual;
+      if (!archivo) return;
+      if (archivo.size > 32 * 1024 * 1024) {
+        estado.textContent = 'No se pueden cargar las fotos, máximo 32MB';
+        foto.value = '';
+        return;
+      }
+      const lector = new FileReader();
+      lector.addEventListener('load', () => { vista.src = lector.result; });
+      lector.readAsDataURL(archivo);
+    });
+    document.getElementById('perfil').addEventListener('submit', event => {
+      const clave = event.currentTarget.elements.clave.value;
+      const repetir = event.currentTarget.elements.clave_repetir.value;
+      if (clave !== repetir) {
+        event.preventDefault();
+        estado.textContent = 'Las contraseñas no coinciden.';
+      }
+    });
+  </script>
+</body>
+</html>

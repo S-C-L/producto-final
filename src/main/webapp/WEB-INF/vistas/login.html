@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestor de Álbumes de Fotos - Inicio</title>
+  <style nonce="{{NONCE}}">
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
+    .login-page {
+      width: 360px;
+      max-width: calc(100% - 32px);
+      padding: 5% 0 48px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    [hidden] { display: none !important; }
+    .form {
+      position: relative;
+      z-index: 1;
+      background: #FFFFFF;
+      max-width: 360px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 45px;
+      text-align: center;
+      border-radius: 16px;
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+    .form h1 { font-size: 24px; font-weight: 300; margin: 0 0 24px; }
+    .form input:not([type="hidden"]), .form select {
+      font-family: "Roboto", sans-serif;
+      outline: 0;
+      background: #f2f2f2;
+      width: 100%;
+      border: 0;
+      margin: 0 0 15px;
+      padding: 15px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    .form input:focus-visible, .form select:focus-visible { outline: 2px solid #0080FF; }
+    .form select { cursor: pointer; }
+    .campo-registro { position: relative; }
+    .ayuda-campo {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      padding: 10px 12px;
+      border-radius: 6px;
+      background: #333333;
+      color: #FFFFFF;
+      font-size: 13px;
+      line-height: 1.4;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .ayuda-campo::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 20px;
+      border: 6px solid transparent;
+      border-top-color: #333333;
+    }
+    .form button {
+      font-family: "Roboto", sans-serif;
+      text-transform: uppercase;
+      background: #0080FF;
+      width: 100%;
+      border: 0;
+      padding: 15px;
+      color: #FFFFFF;
+      font-size: 14px;
+      transition: background 0.3s ease;
+      cursor: pointer;
+    }
+    .form button:hover, .form button:active, .form button:focus { background: #0066CC; }
+    .form .message { margin: 15px 0 0; color: #666666; font-size: 12px; }
+    .form .message a { color: #0080FF; text-decoration: none; }
+    .form .message a:hover { text-decoration: underline; }
+    .form [hidden] { display: none; }
+    .aviso { font-size: 14px; line-height: 1.5; color: #333333; margin: 0 0 20px; background: #e0f0ff; padding: 14px; border-left: 4px solid #0080FF; }
+    body {
+      margin: 0;
+      background: #0080FF;
+      font-family: "Roboto", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    @media (max-width: 400px) { .form { padding: 28px; } }
+  </style>
+</head>
+<body>
+  <main class="login-page">
+    <div class="form">
+      <h1 id="titulo-formulario">Iniciar sesión</h1>
+      {{AVISO}}
+      <form class="register-form" method="post" action="{{RUTA}}" enctype="multipart/form-data" hidden>
+        <input type="hidden" name="accion" value="registro">
+        <input type="hidden" name="csrf" value="{{CSRF}}">
+        <input type="text" name="nombre" placeholder="Nombre completo" aria-label="Nombre completo" autocomplete="name" maxlength="100" required>
+        <input type="text" name="usuario" placeholder="Usuario" aria-label="Usuario para registrarse" autocomplete="username" minlength="3" maxlength="50" pattern="[A-Za-z0-9_.\-]{3,50}" title="De 3 a 50 caracteres: letras, números, punto, guion o guion bajo" required>
+        <input type="email" name="email" placeholder="Correo electrónico" aria-label="Email" autocomplete="email" maxlength="100" required>
+        <select name="sexo" aria-label="Sexo" required>
+          <option value="" disabled selected>Selecciona sexo</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <input id="fecha-nacimiento" type="date" name="fecha_nacimiento" aria-label="Fecha de nacimiento" required>
+        <input type="text" name="ciudad" placeholder="Ciudad de residencia" aria-label="Ciudad" maxlength="100" required>
+        <input type="text" name="pais" placeholder="País de residencia" aria-label="País" maxlength="100" required>
+        <input type="file" name="foto" accept=".jpg,.jpeg,.png,.gif,.webp" aria-label="Fotografía de perfil" required>
+        <input type="password" name="clave" placeholder="Contraseña (mínimo 8 caracteres)" aria-label="Contraseña para registrarse" autocomplete="new-password" minlength="8" maxlength="128" required>
+        <input type="password" name="clave_repetir" placeholder="Repetir contraseña" aria-label="Repetir contraseña" minlength="8" maxlength="128" required>
+        <button type="submit">Crear cuenta</button>
+        <p class="message">¿Ya estás registrado? <a href="#iniciar-sesion">Inicia sesión</a></p>
+      </form>
+      <form class="login-form" method="post" action="{{RUTA}}">
+        <input type="hidden" name="accion" value="entrar">
+        <input type="hidden" name="csrf" value="{{CSRF}}">
+        <input type="text" name="usuario" placeholder="Usuario" aria-label="Usuario" autocomplete="username" maxlength="50" required>
+        <input type="password" name="clave" placeholder="Contraseña" aria-label="Contraseña" autocomplete="current-password" maxlength="128" required>
+        <button type="submit">Iniciar sesión</button>
+        <p class="message">¿No estás registrado? <a href="#crear-cuenta">Crea una cuenta</a></p>
+      </form>
+      <noscript>Para registrar una cuenta, activa JavaScript. Puedes iniciar sesión sin él.</noscript>
+    </div>
+  </main>
+  <script nonce="{{NONCE}}">
+
+    const login = document.querySelector('.login-form');
+    const registro = document.querySelector('.register-form');
+    const titulo = document.getElementById('titulo-formulario');
+    const aviso = document.querySelector('.aviso');
+    const mensajesRegistro = {
+      nombre: 'Escribir nombre completo',
+      usuario: 'Elegir usuario: de 3 a 50 caracteres, con letras, números, punto, guion o guion bajo',
+      email: 'Escribir correo electrónico',
+      sexo: 'Seleccionar sexo',
+      fecha_nacimiento: 'Seleccionar fecha de nacimiento',
+      ciudad: 'Escribir ciudad de residencia',
+      pais: 'Escribir país de residencia',
+      foto: 'Seleccionar fotografía de perfil (obligatoria)',
+      clave: 'Escribir contraseña de 8 a 128 caracteres',
+      clave_repetir: 'Repetir la misma contraseña'
+    };
+    const ayudasRegistro = [];
+    registro.querySelectorAll('input:not([type="hidden"]), select').forEach(campo => {
+      const contenedor = document.createElement('div');
+      contenedor.className = 'campo-registro';
+      const ayuda = document.createElement('span');
+      ayuda.id = 'ayuda-registro-' + campo.name;
+      ayuda.className = 'ayuda-campo';
+      ayuda.setAttribute('role', 'tooltip');
+      ayuda.textContent = mensajesRegistro[campo.name];
+      ayuda.hidden = true;
+      campo.before(contenedor);
+      contenedor.append(campo, ayuda);
+      campo.setAttribute('aria-describedby', ayuda.id);
+      campo.addEventListener('focus', () => { ayuda.hidden = false; });
+      campo.addEventListener('blur', () => { ayuda.hidden = true; });
+      campo.addEventListener('keydown', event => {
+        if (event.key === 'Escape') ayuda.hidden = true;
+      });
+      ayudasRegistro.push(ayuda);
+    });
+    if (aviso && ['Datos incorrectos.', 'Registro completado. Ya puedes iniciar sesión.'].includes(aviso.textContent.trim())) {
+      window.setTimeout(() => { aviso.hidden = true; }, 5000);
+    }
+    function mostrarFormulario() {
+      const crear = location.hash === '#crear-cuenta';
+      login.hidden = crear;
+      registro.hidden = !crear;
+      ayudasRegistro.forEach(ayuda => { ayuda.hidden = true; });
+      titulo.textContent = crear ? 'Registrar' : 'Iniciar sesión';
+      const visible = crear ? registro : login;
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        visible.animate([{ opacity: 0, transform: 'translateY(8px)' },
+                         { opacity: 1, transform: 'translateY(0)' }],
+                        { duration: 300, easing: 'ease' });
+      }
+    }
+    window.addEventListener('hashchange', mostrarFormulario);
+    mostrarFormulario();
+  </script>
+</body>
+</html>

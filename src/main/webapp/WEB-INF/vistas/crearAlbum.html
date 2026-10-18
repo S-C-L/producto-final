@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear Álbum - Gestor de Álbumes de Fotos</title>
+  <style nonce="{{NONCE}}">
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+    body {
+      margin: 0;
+      background: #0080FF;
+      font-family: "Roboto", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .forums-page {
+      width: 760px;
+      max-width: calc(100% - 32px);
+      padding: 5% 0 0;
+      margin: auto;
+    }
+    .form {
+      position: relative;
+      z-index: 1;
+      background: #FFFFFF;
+      margin: 0 auto 70px;
+      padding: 45px;
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+      color: #333333;
+      overflow-wrap: anywhere;
+    }
+    h1 { margin: 0 0 28px; text-align: center; font-size: 28px; font-weight: 700; color: #0080FF; }
+    .aviso { background: #e0f0ff; padding: 14px; border-left: 4px solid #0080FF; color: #333333; margin-bottom: 20px; font-size: 14px; }
+    label { display: block; font-size: 14px; margin-top: 10px; }
+    input:not([type="hidden"]), textarea, select {
+      display: block;
+      font-family: "Roboto", sans-serif;
+      background: #f2f2f2;
+      width: 100%;
+      border: 0;
+      margin: 10px 0 15px;
+      padding: 15px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    input:focus-visible, textarea:focus-visible { outline: 2px solid #0080FF; }
+    button {
+      font-family: "Roboto", sans-serif;
+      text-transform: uppercase;
+      background: #0080FF;
+      width: 100%;
+      border: 0;
+      padding: 15px;
+      color: #FFFFFF;
+      font-size: 14px;
+      transition: background 0.3s ease;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover, button:active, button:focus { background: #0066CC; }
+    .volver {
+      display: inline-block;
+      background: #f2f2f2;
+      color: #333333;
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .volver:hover { background: #e5e7eb; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <main class="forums-page">
+    <div class="form">
+      <h1>Crear Álbum</h1>
+      {{AVISO}}
+      <a href="{{CONTEXTO}}/index" class="volver">← Volver a álbumes</a>
+      <form method="post" action="{{CONTEXTO}}/index">
+        <input type="hidden" name="accion" value="crearAlbum">
+        <input type="hidden" name="csrf" value="{{CSRF}}">
+        <label>Título del álbum<input name="titulo_album" maxlength="150" required></label>
+        <label>Descripción<textarea name="descripcion_album" rows="4" maxlength="5000" required></textarea></label>
+        <button type="submit">Crear álbum</button>
+      </form>
+    </div>
+  </main>
+  {{ALERTA}}
+</body>
+</html>

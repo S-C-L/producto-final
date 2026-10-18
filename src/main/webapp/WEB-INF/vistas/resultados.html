@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resultados de búsqueda - Gestor de Álbumes</title>
+  <style nonce="{{NONCE}}">
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+    body {
+      margin: 0;
+      background: #0080FF;
+      font-family: "Roboto", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .page {
+      width: 850px;
+      max-width: calc(100% - 32px);
+      padding: 5% 0 0;
+      margin: auto;
+    }
+    .card {
+      background: #FFFFFF;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      margin: 0 auto 30px;
+    }
+    h1 {
+      color: #0080FF;
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+    .menu-bar {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .menu-bar a {
+      color: #0080FF;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .menu-bar a:hover {
+      text-decoration: underline;
+    }
+    .filtros {
+      background: #f7f7f7;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #333;
+    }
+    .foto-resumen {
+      display: flex;
+      gap: 15px;
+      background: #f7f7f7;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+    .foto-mini {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 2px solid #0080FF;
+    }
+    .foto-info {
+      flex: 1;
+    }
+    .foto-info p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .foto-info strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .aviso {
+      background: #e0f0ff;
+      padding: 14px;
+      border-left: 4px solid #0080FF;
+      color: #333333;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    a.btn {
+      display: inline-block;
+      background: #0080FF;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    a.btn:hover {
+      background: #0066CC;
+    }
+    .busqueda { display: flex; gap: 12px; margin: 20px 0; }
+    .busqueda input { flex: 1; min-width: 0; padding: 15px; border: 0; border-radius: 8px; background: #f2f2f2; font: inherit; }
+    .busqueda button { padding: 15px; border: 0; border-radius: 8px; background: #0080FF; color: white; cursor: pointer; font: inherit; }
+    .sin-portada { display: flex; align-items: center; justify-content: center; background: #e4e6eb; color: #65676b; flex-shrink: 0; }
+    .foto-info { min-width: 0; overflow-wrap: anywhere; }
+    .foto-mini { flex-shrink: 0; }
+    :focus-visible { outline: 2px solid #0080FF; outline-offset: 3px; }
+    @media (max-width: 600px) { .card { padding: 20px; } .foto-resumen { flex-wrap: wrap; } .foto-mini { width: 80px; height: 80px; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <h1>Resultados de búsqueda</h1>
+      <nav class="menu-bar"><a href="{{CONTEXTO}}/index">← Mis álbumes</a><a href="{{CONTEXTO}}/buscar">Búsqueda avanzada</a></nav>
+      {{AVISO}}
+      <form class="busqueda" method="get" action="{{CONTEXTO}}/resultados" role="search">
+        <input type="search" name="q" placeholder="Buscar álbum o foto" aria-label="Buscar álbum o foto" value="{{BUSQUEDA}}" maxlength="150" required>
+        <button type="submit">Buscar</button>
+      </form>
+      <div class="filtros">
+        {{RESUMEN_BUSQUEDA}}
+      </div>
+      {{CONTENIDO}}
+      <p style="text-align:center; margin-top:25px;">
+        <a href="{{CONTEXTO}}/index" class="btn">Volver a mis álbumes</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

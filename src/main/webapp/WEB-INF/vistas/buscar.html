@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Búsqueda avanzada - Gestor de Álbumes</title>
+  <style nonce="{{NONCE}}">
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+    body {
+      margin: 0;
+      background: #0080FF;
+      font-family: "Roboto", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .page {
+      width: 500px;
+      max-width: calc(100% - 32px);
+      padding: 5% 0 0;
+      margin: auto;
+    }
+    .card {
+      background: #FFFFFF;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      margin: 0 auto 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #0080FF;
+      margin: 0 0 20px;
+      font-size: 24px;
+    }
+    .menu-bar {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .menu-bar a {
+      color: #0080FF;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .menu-bar a:hover {
+      text-decoration: underline;
+    }
+    .form input, .form select {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    .form button {
+      background: #0080FF;
+      color: #FFFFFF;
+      border: 0;
+      padding: 12px;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+    .form button:hover {
+      background: #0066CC;
+    }
+    .aviso {
+      background: #e0f0ff;
+      padding: 14px;
+      border-left: 4px solid #0080FF;
+      color: #333333;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .form label { display: block; margin-top: 16px; font-size: 14px; color: #333333; }
+    .form input { background: #f2f2f2; border: 0; border-radius: 6px; padding: 15px; }
+    .form button { margin-top: 20px; border-radius: 6px; padding: 15px; }
+    .ayuda { color: #666666; font-size: 14px; line-height: 1.6; }
+    .volver { text-align: center; margin-top: 20px; font-size: 14px; }
+    .volver a { color: #0080FF; text-decoration: none; }
+    :focus-visible { outline: 2px solid #0080FF; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="card">
+      <h1>Búsqueda avanzada</h1>
+      <nav class="menu-bar"><a href="{{CONTEXTO}}/index">Mis álbumes</a></nav>
+      <p class="ayuda">Busca entre tus fotos por título, fecha o país. Completa al menos un campo. Si eliges varios, se aplicarán todos los criterios.</p>
+      {{AVISO}}
+      <form id="busqueda-avanzada" class="form" method="get" action="{{RUTA}}">
+        <label for="titulo">Título</label>
+        <input id="titulo" type="text" name="t" placeholder="Título de la foto" maxlength="150">
+        <label for="fecha">Fecha</label>
+        <input id="fecha" type="date" name="f">
+        <label for="pais">País</label>
+        <input id="pais" type="text" name="p" placeholder="País" maxlength="100">
+        <p id="error-busqueda" class="aviso" role="alert" hidden>Completa al menos un criterio: título, fecha o país.</p>
+        <button type="submit">Buscar</button>
+      </form>
+      <p class="volver">
+        <a href="{{CONTEXTO}}/index">Volver a mis álbumes</a>
+      </p>
+    </div>
+  </main>
+  <script nonce="{{NONCE}}">
+    const formulario = document.getElementById('busqueda-avanzada');
+    const error = document.getElementById('error-busqueda');
+    formulario.addEventListener('submit', event => {
+      const tieneCriterios = ['t', 'f', 'p'].some(nombre => formulario.elements[nombre].value.trim());
+      error.hidden = tieneCriterios;
+      if (!tieneCriterios) {
+        event.preventDefault();
+        document.getElementById('titulo').focus();
+      }
+    });
+    formulario.addEventListener('input', () => { error.hidden = true; });
+  </script>
+</body>
+</html>

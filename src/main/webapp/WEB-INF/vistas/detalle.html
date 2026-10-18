@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalle de foto - Gestor de Álbumes</title>
+  <style nonce="{{NONCE}}">
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+    body {
+      margin: 0;
+      background: #0080FF;
+      font-family: "Roboto", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .page {
+      width: 750px;
+      max-width: calc(100% - 32px);
+      padding: 5% 0 0;
+      margin: auto;
+    }
+    .card {
+      background: #FFFFFF;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      margin: 0 auto 30px;
+    }
+    h1 {
+      color: #0080FF;
+      margin: 0 0 20px;
+      font-size: 24px;
+    }
+    .menu-bar {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .menu-bar a {
+      color: #0080FF;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .menu-bar a:hover {
+      text-decoration: underline;
+    }
+    .foto-detalle {
+      display: flex;
+      gap: 25px;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+    .foto-grande {
+      max-width: 360px;
+      max-height: 360px;
+      border: 3px solid #0080FF;
+      border-radius: 6px;
+    }
+    .detalle-info {
+      flex: 1;
+    }
+    .detalle-info p {
+      margin: 8px 0;
+      font-size: 15px;
+      color: #333;
+    }
+    .detalle-info strong {
+      color: #0080FF;
+    }
+    .aviso {
+      background: #e0f0ff;
+      padding: 14px;
+      border-left: 4px solid #0080FF;
+      color: #333333;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    a.btn {
+      display: inline-block;
+      background: #0080FF;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    a.btn:hover {
+      background: #0066CC;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <h1>Detalle de la foto</h1>
+      {{MENU}}
+      {{AVISO}}
+      {{CONTENIDO}}
+      <p style="margin-top:25px; text-align:center;">
+        <a href="{{CONTEXTO}}/index" class="btn">Volver al inicio</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

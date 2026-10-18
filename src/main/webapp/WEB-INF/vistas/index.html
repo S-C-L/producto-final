@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestor de Álbumes de Fotos - Principal</title>
+  <style nonce="{{NONCE}}">
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+    body {
+      margin: 0;
+      background: #0080FF;
+      font-family: "Roboto", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .forums-page {
+      width: 760px;
+      max-width: calc(100% - 32px);
+      padding: 5% 0 0;
+      margin: auto;
+    }
+    .form {
+      position: relative;
+      z-index: 1;
+      background: #FFFFFF;
+      margin: 0 auto 70px;
+      padding: 45px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+      color: #333333;
+      overflow-wrap: anywhere;
+    }
+    h1 { margin: 0 0 28px; text-align: center; font-size: 28px; font-weight: 700; color: #0080FF; }
+    .profile-bar {
+      display: flex;
+      margin-bottom: 20px;
+      padding: 6px 10px;
+      background: #e0f0ff;
+      border-left: 4px solid #0080FF;
+    }
+    .profile-menu { position: relative; width: 100%; }
+    .profile-menu summary {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+    .profile-menu summary::-webkit-details-marker { display: none; }
+    .foto-perfil {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid #0080FF;
+    }
+    .profile-menu summary::after { content: "▾"; margin-left: auto; flex-shrink: 0; color: #666666; }
+    .profile-menu[open] summary::after { content: "▴"; }
+    .profile-menu summary:hover { background: #cce5ff; }
+    .profile-menu summary:focus-visible { outline: 2px solid #0080FF; outline-offset: 3px; }
+    .profile-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 210px;
+      max-width: calc(100vw - 64px);
+      padding: 8px;
+      box-sizing: border-box;
+      background: #FFFFFF;
+      border: 1px solid #e6e6e6;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      z-index: 2;
+    }
+    .profile-dropdown .logout-button,
+    .profile-dropdown .detalle-perfil {
+      display: block;
+      box-sizing: border-box;
+      background: #f2f2f2;
+      color: #333333;
+      text-align: left;
+      text-transform: none;
+      border-radius: 8px;
+      font-size: 15px;
+      padding: 13px 16px;
+      width: 100%;
+      border: 0;
+      cursor: pointer;
+    }
+    .profile-dropdown .logout-button:hover,
+    .profile-dropdown .logout-button:focus,
+    .profile-dropdown .detalle-perfil:hover,
+    .profile-dropdown .detalle-perfil:focus { background: #e5e7eb; text-decoration: none; }
+    .profile-dropdown .detalle-perfil { margin-bottom: 6px; }
+    h2 { margin: 25px 0 20px; font-size: 23px; font-weight: 700; }
+    h2 strong { font-weight: 700; }
+    h3 { margin: 20px 0 15px; font-size: 19px; font-weight: 300; color: #287a2c; }
+    h4 { margin: 0 0 14px; font-size: 17px; }
+    p { line-height: 1.6; font-size: 14px; }
+    a { color: #0080FF; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    label { display: block; font-size: 14px; }
+    input:not([type="hidden"]), textarea, select {
+      display: block;
+      font-family: "Roboto", sans-serif;
+      background: #f2f2f2;
+      width: 100%;
+      border: 0;
+      margin: 10px 0 15px;
+      padding: 15px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    input:focus-visible, textarea:focus-visible { outline: 2px solid #0080FF; }
+    button {
+      font-family: "Roboto", sans-serif;
+      text-transform: uppercase;
+      background: #0080FF;
+      width: 100%;
+      border: 0;
+      padding: 15px;
+      color: #FFFFFF;
+      font-size: 14px;
+      transition: background 0.3s ease;
+      cursor: pointer;
+    }
+    button:hover, button:active, button:focus { background: #0066CC; }
+    hr { border: 0; border-top: 1px solid #e6e6e6; margin: 28px 0; }
+    article { background: #f7f7f7; padding: 20px; }
+    article h3 { margin-top: 0; }
+    article p:last-child { margin-bottom: 0; }
+    article button { margin-top: 8px; }
+    .forum-message { border-top: 1px solid #e6e6e6; padding: 18px 0; }
+    .message-form { margin-top: 18px; }
+    .message-form summary { color: #287a2c; cursor: pointer; font-size: 14px; }
+    .aviso { background: #e0f0ff; padding: 14px; border-left: 4px solid #0080FF; color: #333333; margin-bottom: 20px; font-size: 14px; }
+    .album-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px;
+    }
+    .album-card { display: block; min-width: 0; padding: 0; background: transparent; color: #111111; }
+    .album-cover {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+      background: #e4e6eb;
+      border: 1px solid #ccd0d5;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .album-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .album-title { display: block; margin: 12px 0 4px; font-size: 18px; font-weight: 700; color: #111111; }
+    .album-count { margin: 0; font-size: 14px; }
+    .crear-album:hover { text-decoration: none; }
+    .crear-album:hover .album-cover { background: #d8dadf; }
+    .crear-album:focus-visible { outline: 2px solid #0080FF; outline-offset: 4px; border-radius: 12px; }
+    .btn-icon { font-size: 72px; font-weight: 300; line-height: 1; color: #65676b; }
+    .busqueda { display: flex; gap: 12px; align-items: center; margin-bottom: 24px; }
+    .busqueda input:not([type="hidden"]) { margin: 0; min-width: 0; flex: 1; border-radius: 8px; }
+    .busqueda button { width: auto; border-radius: 8px; }
+    .busqueda-avanzada { margin: -12px 0 12px; }
+    .ultimas-fotos-enlace { margin: 0 0 24px; }
+    @media (max-width: 480px) {
+      .forums-page { padding-top: 24px; }
+      .form { padding: 25px; }
+      h1 { font-size: 24px; }
+      article { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="forums-page">
+    <div class="form">
+      <h1>Gestor de Álbumes de Fotos</h1>
+      {{AVISO}}
+      <div class='profile-bar'><details class='profile-menu'>
+        <summary><img src="{{FOTO_USUARIO}}" alt="Foto de perfil" class="foto-perfil">Bienvenido, {{NOMBRE}}</summary>
+        <div class='profile-dropdown'>
+          <a class="detalle-perfil" href="{{CONTEXTO}}/perfil">Detalle</a>
+          {{FORMULARIO_CERRAR}}
+        </div></details></div>
+      <hr>
+      <h2><strong>Mis álbumes</strong></h2>
+      {{CONTENIDO}}
+    </div>
+  </main>
+  {{ALERTA}}
+  <script nonce="{{NONCE}}">
+    const aviso = document.querySelector('.aviso');
+    if (aviso && ['Álbum creado correctamente.', 'Álbum eliminado correctamente.'].includes(aviso.textContent.trim())) {
+      window.setTimeout(() => { aviso.hidden = true; }, 5000);
+    }
+  </script>
+</body>
+</html>

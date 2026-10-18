@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agregar fotos - {{TITULO}}</title>
+  <style nonce="{{NONCE}}">
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0080ff; font-family: Arial, sans-serif; color: #1c1e21; }
+    main { max-width: 1100px; margin: 48px auto; padding: 32px; background: white; border-radius: 16px; box-shadow: 0 2px 8px #0002; }
+    a { color: #0866ff; text-decoration: none; }
+    h1 { margin-bottom: 8px; }
+    .encabezado { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+    .encabezado h1 { margin: 0; overflow-wrap: anywhere; }
+    .encabezado form { margin: 0; }
+    .accion { display: inline-block; border: 0; border-radius: 6px; background: #0080ff; color: white; padding: 12px 18px; font-size: 14px; cursor: pointer; }
+    .accion:hover { background: #0066cc; }
+    .accion.eliminar { background: #dc2626; }
+    .accion.eliminar:hover { background: #b91c1c; }
+    .ayuda { color: #65676b; line-height: 1.5; }
+    .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; margin-top: 28px; }
+    .foto, .agregar { display: flex; width: 100%; aspect-ratio: 1; border: 1px solid #ccd0d5; border-radius: 8px; overflow: hidden; }
+    .foto img { width: 100%; height: 100%; object-fit: cover; transition: opacity .2s; }
+    .foto:hover img { opacity: .85; }
+    .agregar { align-items: center; justify-content: center; gap: 10px; background: #e4e6eb; color: #65676b; font-size: 23px; font-weight: bold; cursor: pointer; padding: 16px; }
+    .agregar:hover { background: #d8dadf; }
+    .agregar span { font-size: 44px; }
+    .agregar:disabled { cursor: wait; opacity: .6; }
+    :focus-visible { outline: 3px solid #0866ff; outline-offset: 3px; }
+    .aviso { padding: 14px; border-left: 4px solid #0866ff; background: #e7f3ff; }
+    @media (max-width: 600px) { main { margin: 16px; padding: 20px; } .galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .agregar { font-size: 16px; flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="{{CONTEXTO}}/index">← Mis álbumes</a>
+    <div class="encabezado">
+      <h1>{{TITULO}}</h1>
+      <a class="accion" href="{{CONTEXTO}}/actualizar-album?id={{ALBUM_ID}}">Actualizar</a>
+      <form id="eliminar-album" method="post" action="{{CONTEXTO}}/agregar-fotos">
+        <input type="hidden" name="accion" value="eliminarAlbum">
+        <input type="hidden" name="csrf" value="{{CSRF}}">
+        <input type="hidden" name="album_id" value="{{ALBUM_ID}}">
+        <button class="accion eliminar" type="submit">Eliminar</button>
+      </form>
+    </div>
+    <p class="ayuda">{{DESCRIPCION}}</p>
+    {{AVISO}}
+    <p id="estado" role="status"></p>
+    <div class="galeria">
+      <form id="subir" method="post" action="{{CONTEXTO}}/agregar-fotos" enctype="multipart/form-data">
+        <input type="hidden" name="accion" value="agregarFotos">
+        <input type="hidden" name="csrf" value="{{CSRF}}">
+        <input type="hidden" name="album_id" value="{{ALBUM_ID}}">
+        <input id="imagenes" type="file" name="imagenes" accept=".jpg,.jpeg,.png,.gif,.webp" multiple required hidden>
+        <button id="agregar" class="agregar" type="button" title="{{TITULO}} — Agregar fotos · JPG, PNG, GIF o WebP. Máximo 32 MB en total por carga."><span aria-hidden="true">+</span> Añadir al álbum</button>
+        <noscript><p>Activa JavaScript para seleccionar y subir fotos.</p></noscript>
+      </form>
+      {{FOTOS}}
+    </div>
+  </main>
+  <script nonce="{{NONCE}}">
+    const selector = document.getElementById('imagenes');
+    const boton = document.getElementById('agregar');
+    const estado = document.getElementById('estado');
+    const aviso = document.querySelector('.aviso');
+    if (aviso && ['Fotos guardadas correctamente.', 'Álbum actualizado correctamente.'].includes(aviso.textContent.trim())) {
+      window.setTimeout(() => { aviso.hidden = true; }, 5000);
+    }
+    document.getElementById('eliminar-album').addEventListener('submit', event => {
+      if (!confirm('¿Eliminar este álbum y todas sus fotos definitivamente? Esta acción no se puede deshacer.')) event.preventDefault();
+    });
+    boton.addEventListener('click', () => selector.click());
+    selector.addEventListener('change', () => {
+      const archivos = Array.from(selector.files);
+      if (!archivos.length) return;
+      if (archivos.reduce((n, f) => n + f.size, 0) > 32 * 1024 * 1024) {
+        estado.textContent = 'No se pueden cargar las fotos, máximo 32MB';
+        selector.value = '';
+        return;
+      }
+      boton.disabled = true;
+      estado.textContent = 'Guardando fotos…';
+      document.getElementById('subir').requestSubmit();
+    });
+  </script>
+</body>
+</html>
